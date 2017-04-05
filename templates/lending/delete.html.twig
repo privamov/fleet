@@ -1,0 +1,9 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="{{ path('lending_delete', {id: lending.id}) }}">
+        <p>Are you sure you want to delete this active lending from <em>{{ lending.fullName }}</em> on <b>{{ device }}</b>?</p>
+        <button type="submit" class="btn btn-primary">Yes</button>
+        <a class="btn btn-default" href="{{ path('device_show', {id: lending.device}) }}">No</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <a href="{{ path('type_new') }}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add new device type
+    </a>
+
+    <table class="table table-hover" style="margin-top: 15px;">
+        <tr>
+            <th>Name</th>
+            <th>Manufacturer</th>
+            <th>Type</th>
+        </tr>
+        {% for type in types %}
+            <tr>
+                <td><a href="{{ path('type_show', {id: type.id}) }}">{{ type.name }}</a></td>
+                <td>{{ type.manufacturer }}</td>
+                <td>{{ type.type }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

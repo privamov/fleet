@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="" class="form-horizontal">
+        {{ form_widget(form) }}
+
+        <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Update lending</button>
+            <a href="{{ path('device_show', {id: lending.device}) }}" class="btn btn-default">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger"><b>Your search has syntax error.</b> {{ error }}</div>
+    {% elseif devices|length %}
+    <table class="table table-hover" style="margin-top: 15px;">
+        <tr>
+            <th>Number</th>
+            <th>IMEI</th>
+            <th>MAC address</th>
+            <th>Type</th>
+            <th>Status</th>
+        </tr>
+        {% for device in devices %}
+            <tr class="{{ device.lent ? 'warning' : not device.available ? 'danger' : '' }}">
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.number ?: '-' }}</a></td>
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.imei ?: '(unknown)' }}</a></td>
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.mac ?: '(unknown)' }}</a></td>
+                <td>{{ types[device.type] }}</td>
+                <td>{{ device.status}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <div class="alert alert-warning">No device matching your request was found.</div>
+    {% endif %}
+{% endblock %}

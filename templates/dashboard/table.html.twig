@@ -1,0 +1,25 @@
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        {% for name in columns %}
+            <th>{{ name }}</th>
+        {% endfor %}
+        <th>Total</th>
+    </tr>
+    {% for key, row in data.rows %}
+        <tr>
+            <td>{{ rows[key] }}</td>
+            {% for name in columns %}
+                <td>{{ row[name] is defined ? row[name] : 0 }}</td>
+            {% endfor %}
+            <td><b>{{ row._total }}</b></td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td><b>Total</b></td>
+        {% for name in columns %}
+            <td><b>{{ data.total[name] is defined ? data.total[name] : 0 }}</b></td>
+        {% endfor %}
+        <td><b>{{ data.count }}</b></td>
+    </tr>
+</table>

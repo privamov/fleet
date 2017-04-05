@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="" class="form-horizontal">
+        {{ form_widget(form) }}
+
+        <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Register device</button>
+            <a class="btn btn-default" href="{{ path('device_index') }}">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

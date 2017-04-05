@@ -1,0 +1,28 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+    <a href="{{ path('device_new') }}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span>
+        Register new device
+    </a>
+
+    <table class="table table-hover" style="margin-top: 15px;">
+        <tr>
+            <th>Number</th>
+            <th>IMEI</th>
+            <th>MAC address</th>
+            <th>Type</th>
+            <th>Status</th>
+        </tr>
+        {% for device in devices %}
+            <tr class="{{ device.lent ? 'warning' : not device.available ? 'danger' : '' }}">
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.number ?: '-' }}</a></td>
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.imei ?: '(unknown)' }}</a></td>
+                <td><a href="{{ path('device_show', {id: device.id}) }}">{{ device.mac ?: '(unknown)' }}</a></td>
+                <td>{{ types[device.type] }}</td>
+                <td>{{ device.status}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

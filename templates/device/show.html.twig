@@ -1,0 +1,85 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <h1>{{ device }} <small>{{ type }}</small></h1>
+
+    <div class="well">
+        <ul>
+            <li><b>IMEI:</b> {{ device.imei ?: '(unknown)' }}</li>
+            <li><b>IMSI:</b> {{ device.imsi ?: '(unknown)' }}</li>
+            <li><b>NSCE:</b> {{ device.nsce ?: '(unknown)' }}</li>
+            <li><b>MAC address:</b> {{ device.mac ?: '(unknown)' }}</li>
+            <li><b>Status:</b> {{ device.status }}</li>
+            {% if device.purchased or device.price %}
+                <li><b>Purchased:</b> {{ device.purchased }} {% if device.price %}at {{ device.price }} €{% endif %}</li>
+            {% endif %}
+            {% if device.comments %}
+                <li><b>Comments:</b> {{ device.comments }}</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% if device.available %}
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lend-modal">
+        <span class="glyphicon glyphicon-triangle-right"></span> Lend phone
+    </button>
+    {% elseif device.lent and lastLending %}
+        <a class="btn btn-primary" href="{{ path('lending_back', {id: lastLending.id}) }}">
+            <span class="glyphicon glyphicon-forward"></span> Phone is back
+        </a>
+    {% endif %}
+
+    <a class="btn btn-default" href="{{ path('device_edit', {id: device.id}) }}">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+    </a>
+
+    {% if device.available %}
+        {% embed "modal.html.twig" with {modalId: "lend-modal"} %}
+            {% block title 'Lend this device' %}
+            {% block content %}
+                <form method="post" action="{{ path('lending_new', {id: device.id}) }}" class="form-horizontal">
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-primary">Lend</button>
+                </form>
+            {% endblock %}
+        {% endembed %}
+    {% endif %}
+
+    <table class="table table-hover" style="margin-top: 15px;">
+        <tr>
+            <th>&nbsp;</th>
+            <th>Person</th>
+            <th>Started</th>
+            <th>Ended</th>
+            <th>Segment</th>
+            <th>Token</th>
+            <th>Comments</th>
+        </tr>
+        {% for lending in lendings %}
+            <tr class="{{ lending.lent ? 'warning' : '' }}">
+                <td>
+                    <a href="{{ path('lending_edit', {id: lending.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="{{ path('lending_delete', {id: lending.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+                <td>
+                    <span style="font-size: 1.15em; font-style: italic;">{{ lending.firstName }} {{ lending.lastName }}</span>
+                    {% if lending.email or lending.phone %}
+                        <div>
+                            {% if lending.email %}
+                                <a href="mailto:{{ lending.email }}">{{ lending.email }}</a> {% if lending.phone %} – {% endif %}
+                            {% endif %}
+                            {% if lending.phone %}
+                                {{ lending.phone}}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </td>
+                <td>{{ lending.started|date('Y-m-d') }}</td>
+                <td>{{ lending.ended ? lending.ended|date('Y-m-d') : '(not yet)' }}</td>
+                <td>{{ lending.segment ?: '-' }}</td>
+                <td><a href="{{ spotme_url }}/ui/{{ lending.token }}">{{ lending.token }}</a></td>
+                <td>{{ lending.comments }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

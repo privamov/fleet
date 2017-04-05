@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="" class="form-horizontal">
+        {{ form_widget(form) }}
+
+        <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Edit type</button>
+            <a href="{{ path('type_show', {id: type.id}) }}" class="btn btn-default">Cancel</a>
+        </div>
+    </form>
+{% endblock %}
